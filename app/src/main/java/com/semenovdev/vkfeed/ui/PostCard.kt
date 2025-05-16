@@ -116,7 +116,7 @@ fun PostContent() {
 @Composable
 fun PostFooter() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
         StatisticItem(
@@ -146,23 +146,20 @@ fun StatisticItem(
     text: String,
     painterResourceId: Int
 ) {
-    TextButton(
-        onClick = {}
+    Row(
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = text,
-                color = MaterialTheme.colorScheme.secondary
-            )
-            Image(
-                modifier = Modifier.padding(start = 8.dp),
-                painter = painterResource(painterResourceId),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
-            )
-        }
+        Image(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            painter = painterResource(painterResourceId),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+        )
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.secondary
+        )
+
     }
 }
 
