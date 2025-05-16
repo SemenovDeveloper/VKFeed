@@ -2,9 +2,9 @@ package com.semenovdev.vkfeed.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,6 +52,7 @@ fun PostCard() {
             Spacer(
                 modifier = Modifier.size(8.dp)
             )
+            PostFooter()
         }
     }
 }
@@ -86,15 +87,11 @@ fun PostHeader() {
                 )
             }
         }
-        TextButton(
-            onClick = {},
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_menu),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
-            )
-        }
+        Image(
+            painter = painterResource(R.drawable.ic_menu),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+        )
   }
 }
 
@@ -106,7 +103,9 @@ fun PostContent() {
             fontWeight = FontWeight.SemiBold
         )
         Image(
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             painter = painterResource(R.drawable.post_content_image),
             contentDescription = null,
             contentScale = ContentScale.Crop
@@ -116,8 +115,54 @@ fun PostContent() {
 
 @Composable
 fun PostFooter() {
-    Column {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        StatisticItem(
+            text = "921",
+            painterResourceId = R.drawable.ic_views_count
+        )
+        Row {
+            StatisticItem(
+                text = "206",
+                painterResourceId = R.drawable.ic_share
 
+            )
+            StatisticItem(
+                text = "11",
+                painterResourceId = R.drawable.ic_comment
+            )
+            StatisticItem(
+                text = "491",
+                painterResourceId = R.drawable.ic_like
+            )
+        }
+    }
+}
+
+@Composable
+fun StatisticItem(
+    text: String,
+    painterResourceId: Int
+) {
+    TextButton(
+        onClick = {}
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                color = MaterialTheme.colorScheme.secondary
+            )
+            Image(
+                modifier = Modifier.padding(start = 8.dp),
+                painter = painterResource(painterResourceId),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+            )
+        }
     }
 }
 
