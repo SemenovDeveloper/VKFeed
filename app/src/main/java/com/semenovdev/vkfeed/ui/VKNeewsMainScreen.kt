@@ -9,21 +9,20 @@ import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import com.semenovdev.vkfeed.MainViewModel
 import com.semenovdev.vkfeed.domain.FeedPost
-import com.semenovdev.vkfeed.domain.PostStatistic
 
 @Composable
-fun MainScreen() {
-    val feedPost = remember {
-        mutableStateOf(FeedPost())
-    }
+fun MainScreen(
+    viewModel: MainViewModel
+) {
+    val feedPost = viewModel.feedPost.observeAsState(FeedPost())
 
 
     Scaffold(
@@ -66,35 +65,10 @@ fun MainScreen() {
             PostCard(
                 modifier = Modifier.padding(it),
                 feedPost = feedPost.value,
-                onStatisticItemClickListener = { item ->
-                    val newStatistic = feedPost.value.statistics.map {oldItem ->
-                        if (oldItem.type == item.type) {
-                            PostStatistic(
-                                type = oldItem.type,
-                                count = oldItem.count + 1
-                            )
-                        } else {
-                            oldItem
-                        }
-                    }
-
-                    feedPost.value = feedPost.value.copy(statistics = newStatistic)
+                onStatisticItemClickListener = {
+                    viewModel.updateStatic(it)
                 }
             )
         }
     )
 }
-
-
-@Preview
-@Composable
-fun PreviewMainScreen() {
-    MainScreen()
-}
-
-@Preview
-@Composable
-fun PreviewMainScreenDark() {
-    MainScreen()
-}
-

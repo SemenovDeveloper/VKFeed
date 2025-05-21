@@ -34,7 +34,7 @@ import com.semenovdev.vkfeed.domain.StatisticType
 fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
-    onStatisticItemClickListener: (item: PostStatistic) -> Unit
+    onStatisticItemClickListener: (item: PostStatistic) -> Unit,
 ) {
     Card(
         modifier = modifier
