@@ -34,7 +34,10 @@ import com.semenovdev.vkfeed.domain.StatisticType
 fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
-    onStatisticItemClickListener: (item: PostStatistic) -> Unit,
+    onViewClickListener: (item: PostStatistic) -> Unit,
+    onShareClickListener: (item: PostStatistic) -> Unit,
+    onCommentClickListener: (item: PostStatistic) -> Unit,
+    onLikeClickListener: (item: PostStatistic) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -66,7 +69,10 @@ fun PostCard(
             )
             PostFooter(
                 statistic = feedPost.statistics,
-                onItemClickListener = onStatisticItemClickListener
+                onViewClickListener = onViewClickListener,
+                onShareClickListener = onShareClickListener,
+                onCommentClickListener = onCommentClickListener,
+                onLikeClickListener = onLikeClickListener,
             )
         }
     }
@@ -141,7 +147,10 @@ fun PostContent(
 @Composable
 fun PostFooter(
     statistic: List<PostStatistic>,
-    onItemClickListener: (PostStatistic) -> Unit
+    onViewClickListener: (item: PostStatistic) -> Unit,
+    onShareClickListener: (item: PostStatistic) -> Unit,
+    onCommentClickListener: (item: PostStatistic) -> Unit,
+    onLikeClickListener: (item: PostStatistic) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -154,7 +163,7 @@ fun PostFooter(
             text = viewsItem.count.toString(),
             painterResourceId = R.drawable.ic_views_count,
             onItemClickListener = {
-                onItemClickListener(viewsItem)
+                onViewClickListener(viewsItem)
             }
         )
         Row {
@@ -163,7 +172,7 @@ fun PostFooter(
                 text = sharesItem.count.toString(),
                 painterResourceId = R.drawable.ic_share,
                 onItemClickListener = {
-                    onItemClickListener(sharesItem)
+                    onShareClickListener(sharesItem)
                 }
 
             )
@@ -172,7 +181,7 @@ fun PostFooter(
                 text = commentsItem.count.toString(),
                 painterResourceId = R.drawable.ic_comment,
                 onItemClickListener = {
-                    onItemClickListener(commentsItem)
+                    onCommentClickListener(commentsItem)
                 }
             )
             val likesItem = statistic.getItemByType(StatisticType.LIKES)
@@ -180,7 +189,7 @@ fun PostFooter(
                 text = likesItem.count.toString(),
                 painterResourceId = R.drawable.ic_like,
                 onItemClickListener = {
-                    onItemClickListener(likesItem)
+                    onLikeClickListener(likesItem)
                 }
             )
         }

@@ -65,9 +65,10 @@ fun MainScreen(
             PostCard(
                 modifier = Modifier.padding(it),
                 feedPost = feedPost.value,
-                onStatisticItemClickListener = {
-                    viewModel.updateStatic(it)
-                }
+                onViewClickListener = viewModel::updateStatic,
+                onShareClickListener = viewModel::updateStatic,
+                onCommentClickListener = viewModel::updateStatic,
+                onLikeClickListener = viewModel::updateStatic,
             )
         }
     )
