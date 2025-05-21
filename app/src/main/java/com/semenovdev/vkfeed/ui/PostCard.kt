@@ -2,6 +2,7 @@ package com.semenovdev.vkfeed.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,14 +24,20 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.semenovdev.vkfeed.R
+import com.semenovdev.vkfeed.domain.FeedPost
+import com.semenovdev.vkfeed.domain.PostStatistic
+import com.semenovdev.vkfeed.domain.StatisticType
 
 @Composable
-fun PostCard() {
+fun PostCard(
+    modifier: Modifier = Modifier,
+    feedPost: FeedPost,
+    onStatisticItemClickListener: (item: PostStatistic) -> Unit
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.background)
             .padding(8.dp),
         elevation = CardDefaults.cardElevation(
@@ -42,22 +49,37 @@ fun PostCard() {
                 .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 4.dp)
         ) {
-            PostHeader()
+            PostHeader(
+                avatarResId = feedPost.avatarResId,
+                communityName = feedPost.communityName,
+                publicationDate = feedPost.publicationDate
+            )
             Spacer(
                 modifier = Modifier.size(8.dp)
             )
-            PostContent()
+            PostContent(
+                contentImageResId = feedPost.contentImageResId,
+                contentText = feedPost.contentText
+            )
             Spacer(
                 modifier = Modifier.size(8.dp)
             )
-            PostFooter()
+            PostFooter(
+                statistic = feedPost.statistics,
+                onItemClickListener = onStatisticItemClickListener
+            )
         }
     }
 }
 
 
 @Composable
-fun PostHeader() {
+fun PostHeader(
+    avatarResId: Int,
+    communityName: String,
+    publicationDate: String
+) {
+
     Row(
       modifier = Modifier
           .height(50.dp)
@@ -68,7 +90,7 @@ fun PostHeader() {
     ) {
         Row {
             Image(
-                painter = painterResource(R.drawable.post_comunity_thumbnail),
+                painter = painterResource(avatarResId),
                 contentDescription = null,
                 modifier = Modifier.clip(CircleShape)
             )
@@ -76,11 +98,11 @@ fun PostHeader() {
                 modifier = Modifier.padding(start = 8.dp)
             ) {
                 Text(
-                    text = "Типичный программист",
+                    text = communityName,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "14:00",
+                    text = publicationDate,
                     color = MaterialTheme.colorScheme.secondary,
                 )
             }
@@ -94,17 +116,22 @@ fun PostHeader() {
 }
 
 @Composable
-fun PostContent() {
+fun PostContent(
+    contentImageResId: Int,
+    contentText: String,
+) {
+
     Column {
         Text(
-            text = "Кричу: единственным разработчиком AnduinOS, дистрибутива Linux с интерфейсом как у Windows 11, оказался сотрудник Microsoft Андуин Сюэ",
+            text = contentText,
             fontWeight = FontWeight.SemiBold
         )
         Image(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(300.dp)
                 .padding(top = 8.dp),
-            painter = painterResource(R.drawable.post_content_image),
+            painter = painterResource(contentImageResId),
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
@@ -112,39 +139,71 @@ fun PostContent() {
 }
 
 @Composable
-fun PostFooter() {
+fun PostFooter(
+    statistic: List<PostStatistic>,
+    onItemClickListener: (PostStatistic) -> Unit
+) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
+        val viewsItem = statistic.getItemByType(StatisticType.VIEWS)
         StatisticItem(
-            text = "921",
-            painterResourceId = R.drawable.ic_views_count
+            text = viewsItem.count.toString(),
+            painterResourceId = R.drawable.ic_views_count,
+            onItemClickListener = {
+                onItemClickListener(viewsItem)
+            }
         )
         Row {
+            val sharesItem = statistic.getItemByType(StatisticType.SHARES)
             StatisticItem(
-                text = "206",
-                painterResourceId = R.drawable.ic_share
+                text = sharesItem.count.toString(),
+                painterResourceId = R.drawable.ic_share,
+                onItemClickListener = {
+                    onItemClickListener(sharesItem)
+                }
 
             )
+            val commentsItem = statistic.getItemByType(StatisticType.COMMENTS)
             StatisticItem(
-                text = "11",
-                painterResourceId = R.drawable.ic_comment
+                text = commentsItem.count.toString(),
+                painterResourceId = R.drawable.ic_comment,
+                onItemClickListener = {
+                    onItemClickListener(commentsItem)
+                }
             )
+            val likesItem = statistic.getItemByType(StatisticType.LIKES)
             StatisticItem(
-                text = "491",
-                painterResourceId = R.drawable.ic_like
+                text = likesItem.count.toString(),
+                painterResourceId = R.drawable.ic_like,
+                onItemClickListener = {
+                    onItemClickListener(likesItem)
+                }
             )
         }
     }
 }
 
+private fun List<PostStatistic>.getItemByType(type: StatisticType): PostStatistic {
+    return this.find {
+        it.type == type
+    } ?: throw IllegalStateException("StatisticItem type doesn't exist: ${this.toString()}")
+}
+
+
 @Composable
 fun StatisticItem(
     text: String,
-    painterResourceId: Int
+    painterResourceId: Int,
+    onItemClickListener: () -> Unit
 ) {
     Row(
+        modifier = Modifier.clickable {
+            onItemClickListener()
+        },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -159,16 +218,4 @@ fun StatisticItem(
         )
 
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewPostCard() {
-    PostCard()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewPostCardDark() {
-    PostCard()
 }
