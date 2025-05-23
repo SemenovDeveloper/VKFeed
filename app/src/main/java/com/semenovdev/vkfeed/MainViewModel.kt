@@ -7,12 +7,23 @@ import com.semenovdev.vkfeed.domain.FeedPost
 import com.semenovdev.vkfeed.domain.PostStatistic
 
 class MainViewModel: ViewModel() {
-    private val _feedPost = MutableLiveData(FeedPost())
-    val feedPost: LiveData<FeedPost>
-        get() = _feedPost
 
-    fun updateStatic(item: PostStatistic) {
-        val newStatistic = feedPost.value?.statistics?.map {oldItem ->
+    private val initFeedPosts = mutableListOf<FeedPost>().apply {
+        repeat(5) {
+            add(FeedPost(
+                id = it + 1
+            ))
+        }
+    }
+
+
+    private val _feedPosts = MutableLiveData<List<FeedPost>>(initFeedPosts)
+    val feedPosts: LiveData<List<FeedPost>>
+        get() = _feedPosts
+
+
+    fun updateStatic(post: FeedPost, item: PostStatistic) {
+        val newStatistic = post.statistics.map {oldItem ->
             if (oldItem.type == item.type) {
                 PostStatistic(
                     type = oldItem.type,
@@ -21,8 +32,21 @@ class MainViewModel: ViewModel() {
             } else {
                 oldItem
             }
-        } ?: throw IllegalStateException("FeedPost cant bee null")
+        }
+        val currentPosts = feedPosts.value?.toMutableList() ?: mutableListOf()
 
-        _feedPost.value = feedPost.value?.copy(statistics = newStatistic)
+        _feedPosts.value = currentPosts.map {
+            if (it == post) {
+                it.copy(statistics = newStatistic)
+            } else {
+                it
+            }
+        }
+    }
+
+    fun deletePost(post: FeedPost) {
+        val currentPosts = feedPosts.value?.toMutableList() ?: mutableListOf()
+        currentPosts.remove(post)
+        _feedPosts.value = currentPosts
     }
 }

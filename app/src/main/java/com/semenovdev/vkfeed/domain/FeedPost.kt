@@ -3,6 +3,7 @@ package com.semenovdev.vkfeed.domain
 import com.semenovdev.vkfeed.R
 
 data class FeedPost(
+    val id: Int = -1,
     val communityName: String = "/dev/null",
     val publicationDate: String = "14:00",
     val avatarResId: Int = R.drawable.post_comunity_thumbnail,
