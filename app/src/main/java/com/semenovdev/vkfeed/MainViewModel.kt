@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.semenovdev.vkfeed.domain.FeedPost
 import com.semenovdev.vkfeed.domain.PostStatistic
+import com.semenovdev.vkfeed.ui.NavigationItem
 
 class MainViewModel: ViewModel() {
 
@@ -20,6 +21,13 @@ class MainViewModel: ViewModel() {
     private val _feedPosts = MutableLiveData<List<FeedPost>>(initFeedPosts)
     val feedPosts: LiveData<List<FeedPost>>
         get() = _feedPosts
+
+    private val _selectedNavItem = MutableLiveData<NavigationItem>(NavigationItem.Home)
+    val selectedNavItem: LiveData<NavigationItem> = _selectedNavItem
+
+    fun selectNavItem(item: NavigationItem) {
+        _selectedNavItem.value = item
+    }
 
 
     fun updateStatic(post: FeedPost, item: PostStatistic) {
