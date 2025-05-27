@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -14,9 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.semenovdev.vkfeed.MainViewModel
 import com.semenovdev.vkfeed.navigation.AppNavGraph
+import com.semenovdev.vkfeed.navigation.Screen
 
 @Composable
 fun MainScreen(
@@ -32,11 +33,10 @@ fun MainScreen(
     val navHostController = rememberNavController()
     Scaffold(
         bottomBar = {
-            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
-            val items = listOf(NavigationItem.Home, NavigationItem.Favorites, NavigationItem.Profile)
-
-            NavigationBar {
+            BottomAppBar {
+                val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+                val items = listOf(NavigationItem.Home, NavigationItem.Favorites, NavigationItem.Profile)
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         icon = {
@@ -50,7 +50,13 @@ fun MainScreen(
                         },
                         selected = item.screen.route == currentRoute,
                         onClick = {
-                            navHostController.navigate(item.screen.route)
+                            navHostController.navigate(item.screen.route) {
+                                popUpTo(Screen.NewsFeed.route) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         },
                         colors = NavigationBarItemColors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -90,7 +96,7 @@ fun MainScreen(
 fun TextCounter(
     name: String
 ) {
-    var count by remember {
+    var count by rememberSaveable {
         mutableIntStateOf(0)
     }
   Text(

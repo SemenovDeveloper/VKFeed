@@ -14,7 +14,7 @@ import com.semenovdev.vkfeed.MainViewModel
 @Composable
 fun HomeScreen(viewModel: MainViewModel) {
     val feedPosts = viewModel.feedPosts.observeAsState(listOf())
-    LazyColumn() {
+    LazyColumn {
         items(
             items = feedPosts.value,
             key = {
