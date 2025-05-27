@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
@@ -21,20 +20,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.semenovdev.vkfeed.MainViewModel
 import com.semenovdev.vkfeed.navigation.AppNavGraph
-import com.semenovdev.vkfeed.navigation.Screen
+import com.semenovdev.vkfeed.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen(
     viewModel: MainViewModel
 ) {
-    val navHostController = rememberNavController()
+    val navigationState = rememberNavigationState()
     Scaffold(
         bottomBar = {
             BottomAppBar {
-                val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
                 val items = listOf(NavigationItem.Home, NavigationItem.Favorites, NavigationItem.Profile)
                 items.forEachIndexed { index, item ->
@@ -50,13 +48,7 @@ fun MainScreen(
                         },
                         selected = item.screen.route == currentRoute,
                         onClick = {
-                            navHostController.navigate(item.screen.route) {
-                                popUpTo(Screen.NewsFeed.route) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigationState.navigateTo(item.screen.route)
                         },
                         colors = NavigationBarItemColors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -74,7 +66,7 @@ fun MainScreen(
         content = {
             Box (modifier = Modifier.fillMaxSize().padding(it)){
                 AppNavGraph(
-                    navHostController = navHostController,
+                    navHostController = navigationState.navHostController,
                     homeScreenContent = {
                         HomeScreen(viewModel)
                     },
