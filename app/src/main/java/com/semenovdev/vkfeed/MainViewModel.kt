@@ -22,14 +22,6 @@ class MainViewModel: ViewModel() {
     val feedPosts: LiveData<List<FeedPost>>
         get() = _feedPosts
 
-    private val _selectedNavItem = MutableLiveData<NavigationItem>(NavigationItem.Home)
-    val selectedNavItem: LiveData<NavigationItem> = _selectedNavItem
-
-    fun selectNavItem(item: NavigationItem) {
-        _selectedNavItem.value = item
-    }
-
-
     fun updateStatic(post: FeedPost, item: PostStatistic) {
         val newStatistic = post.statistics.map {oldItem ->
             if (oldItem.type == item.type) {
