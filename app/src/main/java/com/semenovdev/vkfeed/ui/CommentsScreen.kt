@@ -21,48 +21,54 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.semenovdev.vkfeed.domain.Comment
-import com.semenovdev.vkfeed.domain.FeedPost
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CommentsScreen(
-    feedPost: FeedPost,
-    comments: List<Comment>,
     onBackPress: () -> Unit,
 ) {
-
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = { onBackPress() }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null
-                )
-            }
-            Text(text = "Comments to FeedPost id: ${feedPost.id}")
-        }
-        LazyColumn {
-            items(
-                items = comments,
-                key = {
-                    it.id
+    val viewModel: CommentsViewModel = viewModel()
+    val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
+    val currentsState = screenState.value
+    when(currentsState) {
+        is CommentsScreenState.Comments ->  {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = { onBackPress() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                    Text(text = "Comments to FeedPost id: ${currentsState.post.id}")
                 }
-            ) { comment ->
-                CommentCard(comment)
-            }
+                LazyColumn {
+                    items(
+                        items = currentsState.comments,
+                        key = {
+                            it.id
+                        }
+                    ) { comment ->
+                        CommentCard(comment)
+                    }
 
+                }
+            }
         }
+        CommentsScreenState.Initial -> {}
     }
 
 }

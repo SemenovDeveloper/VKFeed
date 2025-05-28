@@ -1,6 +1,5 @@
 package com.semenovdev.vkfeed.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SwipeToDismissBox
@@ -9,38 +8,31 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import com.semenovdev.vkfeed.MainViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.semenovdev.vkfeed.domain.FeedPost
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel) {
-    val screenState = viewModel.screenState.observeAsState(HomeScreenState.Initial)
+fun HomeScreen(
+    onCommentClickListener: (post: FeedPost) -> Unit
+) {
+    val viewModel: NewsFeedViewModel = viewModel()
+    val screenState = viewModel.screenState.observeAsState(NewsFeedScreenState.Initial)
 
     when (val currentState = screenState.value) {
-        is HomeScreenState.Comments -> {
-            CommentsScreen(
-                feedPost = currentState.post,
-                comments = currentState.comments,
-                onBackPress = {
-                    viewModel.closeComments()
-                }
-            )
-            BackHandler {
-                viewModel.closeComments()
-            }
-        }
-        is HomeScreenState.Posts -> FeedPosts(
+        is NewsFeedScreenState.Posts -> FeedPosts(
             posts = currentState.posts,
-            viewModel = viewModel
+            viewModel = viewModel,
+            onCommentClickListener = onCommentClickListener
         )
-        HomeScreenState.Initial -> {}
+        NewsFeedScreenState.Initial -> {}
     }
 }
 
 @Composable
 fun FeedPosts(
     posts: List<FeedPost>,
-    viewModel: MainViewModel
+    viewModel: NewsFeedViewModel,
+    onCommentClickListener: (post: FeedPost) -> Unit
 ) {
     LazyColumn {
         items(
@@ -73,7 +65,7 @@ fun FeedPosts(
                         viewModel.updateStatistic(post, statistic)
                     },
                     onCommentClickListener = {
-                        viewModel.showComments(post)
+                        onCommentClickListener(post)
                     },
                     onLikeClickListener = {statistic ->
                         viewModel.updateStatistic(post, statistic)
