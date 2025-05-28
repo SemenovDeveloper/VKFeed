@@ -34,7 +34,8 @@ import com.semenovdev.vkfeed.domain.FeedPost
 @Composable
 fun CommentsScreen(
     feedPost: FeedPost,
-    comments: List<Comment>
+    comments: List<Comment>,
+    onBackPress: () -> Unit,
 ) {
 
     Column {
@@ -42,7 +43,7 @@ fun CommentsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = {}
+                onClick = { onBackPress() }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,

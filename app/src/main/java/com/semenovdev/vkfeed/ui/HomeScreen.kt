@@ -1,5 +1,6 @@
 package com.semenovdev.vkfeed.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SwipeToDismissBox
@@ -15,21 +16,25 @@ import com.semenovdev.vkfeed.domain.FeedPost
 fun HomeScreen(viewModel: MainViewModel) {
     val screenState = viewModel.screenState.observeAsState(HomeScreenState.Initial)
 
-
-
     when (val currentState = screenState.value) {
-        is HomeScreenState.Comments -> CommentsScreen(
-            feedPost = currentState.post,
-            comments = currentState.comments,
-        )
+        is HomeScreenState.Comments -> {
+            CommentsScreen(
+                feedPost = currentState.post,
+                comments = currentState.comments,
+                onBackPress = {
+                    viewModel.closeComments()
+                }
+            )
+            BackHandler {
+                viewModel.closeComments()
+            }
+        }
         is HomeScreenState.Posts -> FeedPosts(
             posts = currentState.posts,
             viewModel = viewModel
         )
-
         HomeScreenState.Initial -> {}
     }
-
 }
 
 @Composable
@@ -62,16 +67,16 @@ fun FeedPosts(
                 PostCard(
                     feedPost = post,
                     onViewClickListener = {statistic ->
-                        viewModel.updateStatic(post, statistic)
+                        viewModel.updateStatistic(post, statistic)
                     },
                     onShareClickListener = {statistic ->
-                        viewModel.updateStatic(post, statistic)
+                        viewModel.updateStatistic(post, statistic)
                     },
-                    onCommentClickListener = {statistic ->
-                        viewModel.updateStatic(post, statistic)
+                    onCommentClickListener = {
+                        viewModel.showComments(post)
                     },
                     onLikeClickListener = {statistic ->
-                        viewModel.updateStatic(post, statistic)
+                        viewModel.updateStatistic(post, statistic)
                     },
                 )
             }
