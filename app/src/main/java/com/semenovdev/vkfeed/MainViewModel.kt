@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.semenovdev.vkfeed.domain.FeedPost
 import com.semenovdev.vkfeed.domain.PostStatistic
+import com.semenovdev.vkfeed.ui.HomeScreenState
 
 class MainViewModel: ViewModel() {
 
-    private val initFeedPosts = mutableListOf<FeedPost>().apply {
+    private val initialPosts = mutableListOf<FeedPost>().apply {
         repeat(5) {
             add(FeedPost(
                 id = it + 1
@@ -16,10 +17,12 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    private val initialState = HomeScreenState.Posts(initialPosts)
 
-    private val _feedPosts = MutableLiveData<List<FeedPost>>(initFeedPosts)
-    val feedPosts: LiveData<List<FeedPost>>
-        get() = _feedPosts
+
+    private val _screenState = MutableLiveData<HomeScreenState>(initialState)
+    val screenState: LiveData<HomeScreenState>
+        get() = _screenState
 
     fun updateStatic(post: FeedPost, item: PostStatistic) {
         val newStatistic = post.statistics.map {oldItem ->
@@ -32,9 +35,9 @@ class MainViewModel: ViewModel() {
                 oldItem
             }
         }
-        val currentPosts = feedPosts.value?.toMutableList() ?: mutableListOf()
+        val currentPosts = screenState.value?.toMutableList() ?: mutableListOf()
 
-        _feedPosts.value = currentPosts.map {
+        _screenState.value = currentPosts.map {
             if (it == post) {
                 it.copy(statistics = newStatistic)
             } else {
@@ -44,8 +47,8 @@ class MainViewModel: ViewModel() {
     }
 
     fun deletePost(post: FeedPost) {
-        val currentPosts = feedPosts.value?.toMutableList() ?: mutableListOf()
+        val currentPosts = screenState.value?.toMutableList() ?: mutableListOf()
         currentPosts.remove(post)
-        _feedPosts.value = currentPosts
+        _screenState.value = currentPosts
     }
 }
