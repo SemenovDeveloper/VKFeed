@@ -81,7 +81,8 @@ fun MainScreen() {
                             CommentsScreen(
                                 onBackPress = {
                                     commentsToPost.value = null
-                                }
+                                },
+                                post = commentsToPost.value!!
                             )
                         }
 

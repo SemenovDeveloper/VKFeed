@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.semenovdev.vkfeed.domain.Comment
 import com.semenovdev.vkfeed.domain.FeedPost
 
-class CommentsViewModel: ViewModel() {
+class CommentsViewModel(
+    post: FeedPost
+): ViewModel() {
     private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
     val screenState: LiveData<CommentsScreenState> = _screenState
 
     init {
-        loadComments(FeedPost(1))
+        loadComments(post)
     }
 
     fun loadComments(post: FeedPost) {
