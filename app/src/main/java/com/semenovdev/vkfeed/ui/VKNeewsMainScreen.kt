@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.semenovdev.vkfeed.domain.FeedPost
 import com.semenovdev.vkfeed.navigation.AppNavGraph
+import com.semenovdev.vkfeed.navigation.Screen
 import com.semenovdev.vkfeed.navigation.rememberNavigationState
 
 @Composable
@@ -39,7 +40,8 @@ fun MainScreen() {
             BottomAppBar {
                 val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
-                val items = listOf(NavigationItem.Home, NavigationItem.Favorites, NavigationItem.Profile)
+                val items =
+                    listOf(NavigationItem.Home, NavigationItem.Favorites, NavigationItem.Profile)
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
                         icon = {
@@ -69,22 +71,16 @@ fun MainScreen() {
             }
         },
         content = {
-            Box (modifier = Modifier.fillMaxSize().padding(it)){
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .padding(it)) {
                 AppNavGraph(
                     navHostController = navigationState.navHostController,
-                    homeScreenContent = {
-                        if (commentsToPost.value == null) {
-                            HomeScreen(onCommentClickListener = {
-                                commentsToPost.value = it
-                            })
-                        } else {
-                            CommentsScreen(
-                                onBackPress = {
-                                    commentsToPost.value = null
-                                },
-                                post = commentsToPost.value!!
-                            )
-                        }
+                    newsFeedScreenContent = {
+                        HomeScreen(onCommentClickListener = {
+                            commentsToPost.value = it
+                            navigationState.navigateTo(Screen.Comments.route)
+                        })
 
                     },
                     favoritesScreenContent = {
@@ -92,6 +88,14 @@ fun MainScreen() {
                     },
                     profileScreenContent = {
                         TextCounter("Profile")
+                    },
+                    commentsScreenContent = {
+                        CommentsScreen(
+                            onBackPress = {
+                                commentsToPost.value = null
+                            },
+                            post = commentsToPost.value!!
+                        )
                     }
                 )
 
@@ -103,15 +107,15 @@ fun MainScreen() {
 
 @Composable
 fun TextCounter(
-    name: String
+    name: String,
 ) {
     var count by rememberSaveable {
         mutableIntStateOf(0)
     }
-  Text(
-      text = "Name:$name, count:$count",
-      modifier = Modifier.clickable{
-          count += 1
-      }
-  )
+    Text(
+        text = "Name:$name, count:$count",
+        modifier = Modifier.clickable {
+            count += 1
+        }
+    )
 }
