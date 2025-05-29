@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import com.semenovdev.vkfeed.ui.MainScreen
-import com.semenovdev.vkfeed.ui.NewsFeedViewModel
 import com.semenovdev.vkfeed.ui.theme.VKFeedTheme
 
 class MainActivity : ComponentActivity() {

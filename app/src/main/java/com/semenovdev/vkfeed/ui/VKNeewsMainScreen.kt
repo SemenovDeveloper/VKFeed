@@ -40,7 +40,6 @@ fun MainScreen() {
         bottomBar = {
             BottomAppBar {
                 val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route
                 val items =
                     listOf(NavigationItem.Home, NavigationItem.Favorites, NavigationItem.Profile)
                 items.forEachIndexed { index, item ->
@@ -59,7 +58,9 @@ fun MainScreen() {
                         },
                         selected = selected,
                         onClick = {
-                            navigationState.navigateTo(item.screen.route)
+                            if(!selected) {
+                                navigationState.navigateToTab(item.screen.route)
+                            }
                         },
                         colors = NavigationBarItemColors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -95,7 +96,7 @@ fun MainScreen() {
                     commentsScreenContent = {
                         CommentsScreen(
                             onBackPress = {
-                                commentsToPost.value = null
+                                navigationState.navHostController.popBackStack()
                             },
                             post = commentsToPost.value!!
                         )
