@@ -12,19 +12,15 @@ import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.semenovdev.vkfeed.domain.FeedPost
 import com.semenovdev.vkfeed.navigation.AppNavGraph
 import com.semenovdev.vkfeed.navigation.Screen
 import com.semenovdev.vkfeed.navigation.rememberNavigationState
@@ -32,9 +28,6 @@ import com.semenovdev.vkfeed.navigation.rememberNavigationState
 @Composable
 fun MainScreen() {
     val navigationState = rememberNavigationState()
-    val commentsToPost: MutableState<FeedPost?> = remember {
-        mutableStateOf(null)
-    }
 
     Scaffold(
         bottomBar = {
@@ -83,8 +76,7 @@ fun MainScreen() {
                     navHostController = navigationState.navHostController,
                     newsFeedScreenContent = {
                         HomeScreen(onCommentClickListener = {
-                            commentsToPost.value = it
-                            navigationState.navigateTo(Screen.Comments.route)
+                            navigationState.navigateToComments(it)
                         })
                     },
                     favoritesScreenContent = {
@@ -93,12 +85,12 @@ fun MainScreen() {
                     profileScreenContent = {
                         TextCounter("Profile")
                     },
-                    commentsScreenContent = {
+                    commentsScreenContent = { post ->
                         CommentsScreen(
                             onBackPress = {
                                 navigationState.navHostController.popBackStack()
                             },
-                            post = commentsToPost.value!!
+                            post = post
                         )
                     }
                 )
