@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.semenovdev.vkfeed.domain.FeedPost
 import com.semenovdev.vkfeed.navigation.AppNavGraph
@@ -43,6 +44,9 @@ fun MainScreen() {
                 val items =
                     listOf(NavigationItem.Home, NavigationItem.Favorites, NavigationItem.Profile)
                 items.forEachIndexed { index, item ->
+                    val selected = navBackStackEntry?.destination?.hierarchy?.any {
+                        it.route == item.screen.route
+                    } == true
                     NavigationBarItem(
                         icon = {
                             Icon(
@@ -53,7 +57,7 @@ fun MainScreen() {
                         label = {
                             Text(text = stringResource(item.titleResId))
                         },
-                        selected = item.screen.route == currentRoute,
+                        selected = selected,
                         onClick = {
                             navigationState.navigateTo(item.screen.route)
                         },
@@ -81,7 +85,6 @@ fun MainScreen() {
                             commentsToPost.value = it
                             navigationState.navigateTo(Screen.Comments.route)
                         })
-
                     },
                     favoritesScreenContent = {
                         TextCounter("Favourites")
