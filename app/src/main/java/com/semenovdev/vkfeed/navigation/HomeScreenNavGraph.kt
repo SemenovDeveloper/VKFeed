@@ -2,7 +2,9 @@ package com.semenovdev.vkfeed.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.semenovdev.vkfeed.domain.FeedPost
 
@@ -20,6 +22,13 @@ fun NavGraphBuilder.homeScreenNavGraph(
         )
         composable(
             route = Screen.Comments.route,
+            arguments = listOf(
+                navArgument(
+                    name = Screen.KEY_POST_ID,
+                ) {
+                    type = NavType.IntType
+                }
+            ),
             content = {
                 val postId: Int = it.arguments?.getInt(Screen.KEY_POST_ID) ?: 0
                 commentsScreenContent(FeedPost(id = postId))

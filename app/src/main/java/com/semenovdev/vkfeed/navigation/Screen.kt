@@ -24,7 +24,7 @@ sealed class Screen (
 
         const val ROUTE_HOME = "home"
         const val ROUTE_NEWS_FEED = "news_feed"
-        const val ROUTE_COMMENTS = "comments/${KEY_POST_ID}"
+        const val ROUTE_COMMENTS = "comments/{$KEY_POST_ID}"
         const val ROUTE_FAVOURITES = "favourites"
         const val ROUTE_PROFILE = "profile"
 
