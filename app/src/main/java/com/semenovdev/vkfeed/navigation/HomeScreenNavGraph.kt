@@ -11,13 +11,13 @@ import com.semenovdev.vkfeed.domain.FeedPost
 
 fun NavGraphBuilder.homeScreenNavGraph(
     newsFeedScreenContent: @Composable () -> Unit,
-    commentsScreenContent: @Composable (post: FeedPost) -> Unit
+    commentsScreenContent: @Composable (post: FeedPost) -> Unit,
 ) {
     navigation(
         startDestination = Screen.NewsFeed.route,
         route = Screen.Home.route
     ) {
-        composable (
+        composable(
             route = Screen.NewsFeed.route,
             content = { newsFeedScreenContent() }
         )
@@ -25,12 +25,12 @@ fun NavGraphBuilder.homeScreenNavGraph(
             route = Screen.Comments.route,
             arguments = listOf(
                 navArgument(name = Screen.KEY_FEED_POST) {
-                    type = NavType.StringType
+                    type = FeedPost.NavigationType
                 }
             ),
             content = {
-                val postJson: String = it.arguments?.getString(Screen.KEY_FEED_POST) ?: ""
-                val post = Gson().fromJson<FeedPost>(postJson, FeedPost::class.java)
+                val post = it.arguments?.getParcelable<FeedPost>(Screen.KEY_FEED_POST)
+                    ?: throw RuntimeException("FeedPost is null")
                 commentsScreenContent(post)
             }
         )
