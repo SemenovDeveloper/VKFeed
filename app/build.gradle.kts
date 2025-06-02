@@ -43,6 +43,7 @@ dependencies {
 
     val nav_version = "2.9.0"
     val lifecycleVersion = "2.9.0"
+    implementation("io.coil-kt.coil3:coil-compose:3.2.0")
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
