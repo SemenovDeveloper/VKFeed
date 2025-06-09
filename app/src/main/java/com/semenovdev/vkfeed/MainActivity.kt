@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.semenovdev.vkfeed.ui.ActivityResultTest
-import com.semenovdev.vkfeed.ui.MainScreen
 import com.semenovdev.vkfeed.ui.theme.VKFeedTheme
 
 class MainActivity : ComponentActivity() {

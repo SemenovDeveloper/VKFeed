@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.semenovdev.vkfeed.navigation.AppNavGraph
-import com.semenovdev.vkfeed.navigation.Screen
 import com.semenovdev.vkfeed.navigation.rememberNavigationState
 
 @Composable
