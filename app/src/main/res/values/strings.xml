@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">VKFeed</string>
-    <integer name="com_vk_sdk_AppId">53716758</integer>
     <string name="navigation_item_home">Главная</string>
     <string name="navigation_item_favourites">Избранное</string>
     <string name="navigation_item_profile">Профиль</string>
     <string name="post_content">"Кричу: единственным разработчиком AnduinOS, дистрибутива Linux с интерфейсом как у Windows 11, оказался сотрудник Microsoft Андуин Сюэ"</string>
+    <string name="login">Войти</string>
+    <integer name="com_vk_sdk_AppId">53716758</integer>
 </resources>
