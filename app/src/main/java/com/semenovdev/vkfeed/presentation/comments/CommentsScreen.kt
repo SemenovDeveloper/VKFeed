@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.comments
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -31,6 +31,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.semenovdev.vkfeed.domain.Comment
 import com.semenovdev.vkfeed.domain.FeedPost
+import com.semenovdev.vkfeed.presentation.comments.CommentsScreenState
+import com.semenovdev.vkfeed.presentation.comments.CommentsViewModel
+import com.semenovdev.vkfeed.presentation.comments.CommentsViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

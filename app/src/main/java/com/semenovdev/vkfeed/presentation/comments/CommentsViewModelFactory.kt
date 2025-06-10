@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.comments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

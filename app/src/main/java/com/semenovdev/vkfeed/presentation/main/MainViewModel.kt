@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -17,7 +17,7 @@ class MainViewModel: ViewModel() {
     val authState: LiveData<AuthState> = _authState
 
     init {
-        _authState.value = if (VKID.instance.accessToken?.token?.isNotEmpty() == true) {
+        _authState.value = if (VKID.Companion.instance.accessToken?.token?.isNotEmpty() == true) {
             AuthState.Authorized
         } else {
             AuthState.Unauthorized
@@ -36,7 +36,7 @@ class MainViewModel: ViewModel() {
 
     fun performAuth() {
         viewModelScope.launch {
-            VKID.instance.authorize(vkAuthCallback)
+            VKID.Companion.instance.authorize(vkAuthCallback)
         }
     }
 

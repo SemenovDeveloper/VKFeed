@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.main
 
 sealed class AuthState {
     object Authorized: AuthState()

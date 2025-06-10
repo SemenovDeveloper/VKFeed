@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,8 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.semenovdev.vkfeed.navigation.AppNavGraph
-import com.semenovdev.vkfeed.navigation.Screen
 import com.semenovdev.vkfeed.navigation.rememberNavigationState
+import com.semenovdev.vkfeed.presentation.comments.CommentsScreen
+import com.semenovdev.vkfeed.presentation.news.NewsFeedScreen
+import com.semenovdev.vkfeed.presentation.main.NavigationItem
 
 @Composable
 fun MainScreen() {
@@ -75,7 +77,7 @@ fun MainScreen() {
                 AppNavGraph(
                     navHostController = navigationState.navHostController,
                     newsFeedScreenContent = {
-                        HomeScreen(onCommentClickListener = {
+                        NewsFeedScreen(onCommentClickListener = {
                             navigationState.navigateToComments(it)
                         })
                     },

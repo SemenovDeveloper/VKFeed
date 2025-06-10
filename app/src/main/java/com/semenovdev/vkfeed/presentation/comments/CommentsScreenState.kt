@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.comments
 
 import com.semenovdev.vkfeed.domain.Comment
 import com.semenovdev.vkfeed.domain.FeedPost

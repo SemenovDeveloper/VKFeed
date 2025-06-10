@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.news
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.semenovdev.vkfeed.domain.FeedPost
 
 @Composable
-fun HomeScreen(
+fun NewsFeedScreen(
     onCommentClickListener: (post: FeedPost) -> Unit
 ) {
     val viewModel: NewsFeedViewModel = viewModel()
@@ -58,16 +58,16 @@ fun FeedPosts(
             ) {
                 PostCard(
                     feedPost = post,
-                    onViewClickListener = {statistic ->
+                    onViewClickListener = { statistic ->
                         viewModel.updateStatistic(post, statistic)
                     },
-                    onShareClickListener = {statistic ->
+                    onShareClickListener = { statistic ->
                         viewModel.updateStatistic(post, statistic)
                     },
                     onCommentClickListener = {
                         onCommentClickListener(post)
                     },
-                    onLikeClickListener = {statistic ->
+                    onLikeClickListener = { statistic ->
                         viewModel.updateStatistic(post, statistic)
                     },
                 )

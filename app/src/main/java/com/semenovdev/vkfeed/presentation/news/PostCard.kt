@@ -1,4 +1,4 @@
-package com.semenovdev.vkfeed.ui
+package com.semenovdev.vkfeed.presentation.news
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
