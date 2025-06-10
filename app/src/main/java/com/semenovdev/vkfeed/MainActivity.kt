@@ -1,13 +1,11 @@
 package com.semenovdev.vkfeed
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.semenovdev.vkfeed.ui.AuthState
 import com.semenovdev.vkfeed.ui.LoginScreen
@@ -15,12 +13,12 @@ import com.semenovdev.vkfeed.ui.MainScreen
 import com.semenovdev.vkfeed.ui.MainViewModel
 import com.semenovdev.vkfeed.ui.theme.VKFeedTheme
 import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKAuthenticationResult
-import com.vk.api.sdk.auth.VKScope
+import com.vk.id.VKID
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        VKID.init(this)
         enableEdgeToEdge()
         setContent {
             VKFeedTheme {
@@ -39,7 +37,8 @@ class MainActivity : ComponentActivity() {
                     AuthState.Unauthorized -> {
                         LoginScreen(
                             onLoginClick = {
-                                launcher.launch(listOf(VKScope.WALL))
+                                viewModel.performAuth()
+//                                launcher.launch(listOf(VKScope.WALL))
                             }
                         )}
                     AuthState.Initial -> null
